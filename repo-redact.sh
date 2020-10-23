@@ -15,7 +15,6 @@ list-gen () {
 insights-prep () {
   list-gen
   FILE_IP='/etc/insights-client/file-redaction.yaml'
-  REMOVE_CONF=('remove.conf' 'file-content-redaction.yaml')
   if rpm -q insights-client; then
     rm -f '/etc/insights-client/file-content-redaction.yaml /etc/insights-client/remove.conf'
     mv $FILE_RE $FILE_IP
