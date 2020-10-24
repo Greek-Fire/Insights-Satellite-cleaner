@@ -33,10 +33,10 @@ repo_list () {
   for r in $REPOS; do
     enb=$(cat $FILE_P$r | grep -i 'enabled =')
     echo $enb
-    if [[ $enb == '*enabled = 1*' ]]; then
+    if [[ $enb == 'enabled = 1' ]]; then
       echo "$(r)"
       enabled+=( $r )
-    elif [[ $enb == '*enabled = 0*' ]]; then
+    elif [[ $enb == 'enabled = 0' ]]; then
       echo $r
       not_enabled+=( $r )
     fi
