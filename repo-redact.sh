@@ -8,7 +8,7 @@ list_gen () {
   FILE_P='- /etc/yum.repos.d/'
   echo -e '---\nfiles:' > $FILE_RE
   chmod 0600 $FILE_RE $FILE_CT
-  echo -e '---\npatterns:\n  regex:\n  - "enabled = 1"' > $FILE_CT
+  echo -e "---\npatterns:\n  regex:\n  - '\[.*?\]'" > $FILE_CT
   for r in $REPOS; do
     echo -e "$FILE_P$r" >> $FILE_RE 
   done
