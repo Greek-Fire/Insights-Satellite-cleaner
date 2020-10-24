@@ -3,12 +3,10 @@ set -x
 
 list_gen () {
   FILE_RE='/var/tmp/file-redaction.yaml'
-#  FILE_CT='/var/tmp/file-content-redaction.yaml'
   REPOS=$(ls /etc/yum.repos.d/)
   FILE_P='- /etc/yum.repos.d/'
   echo -e '---\nfiles:' > $FILE_RE
   chmod 0600 $FILE_RE $FILE_CT
-#  echo -e '---\npatterns:\n  regex:\n  - "enabled = 1"' > $FILE_CT
   for r in $REPOS; do
     echo -e "$FILE_P$r" >> $FILE_RE 
   done
@@ -19,11 +17,9 @@ insights_prep () {
   if rpm -q insights-client; then
     rm -f /etc/insights-client/file-* /etc/insights-client/remove.conf
     mv $FILE_RE /etc/insights-client/file-redaction.yaml
-#    mv $FILE_CT /etc/insights-client/file-content-redaction.yaml
     insights-client
   else
     yum install insights-client -y
-#    mv $FILE_CT $FILE_IP
     mv $FILE_RE $FILE_IP
     insights-client --register
   fi
