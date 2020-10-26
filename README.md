@@ -1,5 +1,7 @@
 # Insights-Satellite-cleaner
 
-chmod +x ./repo-redact.sh \n
-su - root \n
+chmod +x ./repo-redact.sh
+
+su - root
+
 bash ./repo-redact.sh
