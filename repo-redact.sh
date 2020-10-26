@@ -46,7 +46,7 @@ temp_disable_repo_list () {
   repo_list
   echo "Disabling all Repos"
   subscription-manager repos --disable=*
-  sed -i 's/^enabled = 1/enabled = 0/' /etc/yum.repos.d/*
+  grep -rl ’enabled = 1‘ /etc/yum.repos.d/ | xargs  sed -i 's/^enabled = 1/enabled = 0/'
   yum clean all
 }
 
