@@ -4,13 +4,13 @@
 list_gen () {
   FILE_RE='/var/tmp/file-redaction.yaml'
   FILE_CT='/var/tmp/file-content-redaction.yaml'
-  REPOS=$(ls /etc/yum.repos.d/)
-  FILE_P='- /etc/yum.repos.d/'
+  REPOS=$(find /etc/yum.repos.d/ -type f)
   echo -e '---\nfiles:' > $FILE_RE
   echo -e "---\npatterns:\n  regex:\n  - '\[.*?\]'" > $FILE_CT
   chmod 0600 $FILE_RE $FILE_CT
   for r in $REPOS; do
-    echo -e "$FILE_P$r" >> $FILE_RE 
+    echo $r
+    echo -e "$F$r" >> $FILE_RE 
   done
 }
 
