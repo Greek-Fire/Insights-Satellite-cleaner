@@ -26,15 +26,18 @@ install_insights () {
 
 temp_disable_repo_list () {
   list_gen
-  repo_list
   echo "Disabling all Repos"
   subscription-manager repos --disable=*
-  find /etc/yum.repos.d/ -type f -exec sed -ir 's/enabled.*1/enabled = 0/i' {} \;
+  REPOS=$(grep -irl 'enabled.*0' /etc/yum.repos.d/*)
+  for r in $REPOS; do
+    echo $r
+  sed -i 's/enabled.*0/enabled = 1/i' $r
+  done  
   yum clean all
 }
 
 enable_repo_list () {
-  REPOS=$(grep -rl 'enabled.*1' /etc/yum.repos.d/*)
+  REPOS=$(grep -irl 'enabled.*1' /etc/yum.repos.d/*)
   subscription-manager repos --enable=*satellite-tools*
   for r in $REPOS; do
     echo $r
