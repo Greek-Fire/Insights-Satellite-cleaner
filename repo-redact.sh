@@ -24,23 +24,6 @@ install_insights () {
   fi
 }
 
-repo_list () {
-  REPOS=$(ls /etc/yum.repos.d/)
-  TEST=(grep -r 'enabled = 0' /etc/yum.repos.d/*)
-  FILE_P='/etc/yum.repos.d/'
-  ENABLED=()
-  if [[ -z $TEST ]]; then
-    for r in $REPOS; do
-      echo  $FILE_P$r
-      enb=$(cat $FILE_P$r | grep enabled)
-      if [[ $enb == *'1'* ]]; then
-        ENABLED+=( $r )
-        echo ${ENABLED[@]}
-      fi
-    done
-  fi
-}
-
 temp_disable_repo_list () {
   list_gen
   repo_list
@@ -51,12 +34,12 @@ temp_disable_repo_list () {
 }
 
 enable_repo_list () {
+  REPOS=$(grep -rl 'enabled.*1' /etc/yum.repos.d/*)
   subscription-manager repos --enable=*satellite-tools*
-  for r in ${enabled[@]}; do
+  for r in $REPOS; do
     echo $r
-  find /etc/yum.repos.d/ -type f -exec sed -ir 's/enabled.*0/enabled = 1/i' {} \;
+  sed -i 's/enabled.*0/enabled = 1/i' $r
   done
-  echo ${enabled[@]}
 }
 
 run_insights () {
