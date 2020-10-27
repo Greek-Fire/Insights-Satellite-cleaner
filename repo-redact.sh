@@ -9,8 +9,7 @@ list_gen () {
   echo -e "---\npatterns:\n  regex:\n  - '\[.*?\]'" > $FILE_CT
   chmod 0600 $FILE_RE $FILE_CT
   for r in $REPOS; do
-    echo $r
-    echo -e "$F$r" >> $FILE_RE 
+    echo -e "$F$r" >> $FILE_RE
   done
 }
 
@@ -20,31 +19,30 @@ install_insights () {
     echo "Insights in not Install"
     subscription-manager repos --enable=*
     yum install insights-client -y
-    subscription-manager repos --disable=* 
+    subscription-manager repos --disable=*
   fi
 }
 
 temp_disable_repo_list () {
   list_gen
   echo "Disabling all Repos"
-  subscription-manager repos --disable=*
-  REPOS=$(grep -irl 'enabled.*0' /etc/yum.repos.d/*)
-  for r in $REPOS; do
+  EN_REPOS=$(grep -irl 'enabled.*1' /etc/yum.repos.d/*)
+  DIS_REPOS=$(grep -Pirl '\[.*?\]' /etc/yum.repos.d/*)
+  for r in $DIS_REPOS; do
     echo $r
-  sed -i 's/enabled.*0/enabled = 1/i' $r
-  done  
+    sed -i 's/enabled.*1/enabled = 0/i' $r
+  done
+  subscription-manager repos --disable=*
   yum clean all
 }
 
 enable_repo_list () {
-  REPOS=$(grep -irl 'enabled.*1' /etc/yum.repos.d/*)
   subscription-manager repos --enable=*satellite-tools*
-  for r in $REPOS; do
+  for r in $EN_REPOS; do
     echo $r
-  sed -i 's/enabled.*0/enabled = 1/i' $r
+    sed -i 's/enabled.*0/enabled = 1/i' $r
   done
 }
-
 run_insights () {
   INSTIGHT_TEST=$(insights-client --status)
   if [[ $INSTIGHT_TEST == 'System is NOT registered'* ]]; then
