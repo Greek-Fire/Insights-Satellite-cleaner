@@ -46,7 +46,7 @@ temp_disable_repo_list () {
   repo_list
   echo "Disabling all Repos"
   subscription-manager repos --disable=*
-  find /etc/yum.repos.d/ -type f -exec sed -i 's/enabled = 1/enabled = 0/' {} \;
+  find /etc/yum.repos.d/ -type f -exec sed -i 's/enabled.*1/enabled = 0/i' {} \;
   yum clean all
 }
 
@@ -54,7 +54,7 @@ enable_repo_list () {
   subscription-manager repos --enable=*satellite-tools*
   for r in ${enabled[@]}; do
     echo $r
-    sed -i 's/^enabled = 0/enabled = 1/' $FILE_P$r
+  find /etc/yum.repos.d/ -type f -exec sed -i 's/enabled.*0/enabled = 1/i' {} \;
   done
   echo ${enabled[@]}
 }
